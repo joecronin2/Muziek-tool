@@ -1,6 +1,5 @@
 import Note from './models/Note.ts';
 import Fretboard from './models/Fretboard.ts';
-import GuitarString from "./models/GuitarString.ts";
 import Scale from "./models/Scale.ts";
 
 function App() {

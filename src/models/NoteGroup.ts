@@ -2,7 +2,7 @@ import Note from "./Note.ts";
 
 export default class NoteGroup {
     private rootNote: Note;
-    private intervals: number[];
+    protected intervals: number[];
     private notes: Note[];
 
 

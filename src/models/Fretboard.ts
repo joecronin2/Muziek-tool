@@ -59,7 +59,7 @@ export default class Fretboard {
 
         result += "\n";
 
-        for (const element of result) {
+        for (let i = 0; i < result.length; i++) {
             result += "─";
         }
 
