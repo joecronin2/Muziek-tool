@@ -1,4 +1,4 @@
-import Note from "./Note.ts";
+import Note from "./Note";
 
 export default class NoteGroup {
     private rootNote: Note;

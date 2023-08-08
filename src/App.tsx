@@ -1,6 +1,8 @@
-import Note from './models/Note.ts';
-import Fretboard from './models/Fretboard.ts';
-import Scale from "./models/Scale.ts";
+import Note from './models/Note';
+import Fretboard from './models/Fretboard';
+import Scale from "./models/Scale";
+import React from 'react';
+
 
 function App() {
 
@@ -12,7 +14,7 @@ function App() {
 
     new Note("C").getNextNoteBySemitones(4)
 
-    let CMajorScale = new Scale(new Note ("C"), Scale.MAJOR)
+    let CMajorScale = new Scale(new Note("C"), Scale.MAJOR)
 
     console.log(CMajorScale.toString())
 
@@ -22,6 +24,7 @@ function App() {
 
   return (
       <div>
+
           <h1>Tuning:</h1>
           <input type={"text"} />
           <button>Submit</button>

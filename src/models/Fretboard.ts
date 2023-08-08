@@ -1,6 +1,6 @@
-import Note from "./Note.ts";
-import GuitarString from "./GuitarString.ts";
-import NoteGroup from "./NoteGroup.ts";
+import Note from "./Note";
+import GuitarString from "./GuitarString";
+import NoteGroup from "./NoteGroup";
 
 
 export default class Fretboard {

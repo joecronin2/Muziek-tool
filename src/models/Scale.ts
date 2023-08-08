@@ -1,4 +1,4 @@
-import NoteGroup from "./NoteGroup.ts";
+import NoteGroup from "./NoteGroup";
 export default class Scale extends NoteGroup {
     static readonly MAJOR = [2, 2, 1, 2, 2, 2, 1];
     static readonly MINOR = [2, 1, 2, 2, 1, 2, 2];
