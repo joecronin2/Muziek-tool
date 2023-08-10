@@ -4,12 +4,34 @@ import NoteGroup from "./NoteGroup";
 
 
 export default class Fretboard {
+    /**
+     * The fretboard which is an array of GuitarString objects
+     * @private
+     */
     private fretboard: GuitarString[];
+
+    /**
+     * The tuning of the fretboard
+     * @private
+     */
     private tuning: Note[];
+
+    /**
+     * The amount of frets on the fretboard
+     * @private
+     */
     private fretsAmount: number;
 
+    /**
+     * The default amount of frets that will be used if no amount is provided
+     * @private
+     */
     private static defaultFretsAmount = 24;
 
+    /**
+     * The default tuning that will be used if no tuning is provided
+     * @private
+     */
     private static defaultTuning = [
         new Note("E", 4),
         new Note("B", 3),
@@ -19,6 +41,12 @@ export default class Fretboard {
         new Note("E", 2)
     ];
 
+    /**
+     * The constructor of the Fretboard class.
+     * @param tuning: Note[] - The tuning of the fretboard
+     * @param fretsAmount: number - The amount of frets on the fretboard
+     * @param noteGroup: Can be used to apply groups of notes (e.g. scales or chords) to the fretboard, for example to highlight those notes
+     */
     constructor (tuning?: Note[], fretsAmount?: number, noteGroup?: NoteGroup) {
         // Checks if the tuning was provided and sets it to the default if it wasn't
         if (tuning === undefined) {
@@ -34,8 +62,11 @@ export default class Fretboard {
             this.fretsAmount = fretsAmount;
         }
 
+        // Creates the fretboard
         this.fretboard = [];
+        // Loop through the notes of the tuning and create a new GuitarString object based on each note
         for (const rootNote of this.tuning) {
+            // Apply the optional noteGroup to the GuitarString object if it was provided
             if (noteGroup === undefined) {
                 this.fretboard.push(new GuitarString(rootNote, this.fretsAmount));
             } else {
@@ -44,11 +75,38 @@ export default class Fretboard {
         }
     }
 
+    /**
+     * Returns the fretboard as an array of GuitarString objects
+     * @returns GuitarString[]
+     */
+    getFretboard(): GuitarString[] {
+        return this.fretboard;
+    }
 
+    /**
+     * Returns the amount of frets on the fretboard
+     * @returns number: The amount of frets on the fretboard
+     */
+    getFretCount(): number {
+        return this.fretsAmount;
+    }
+
+    /**
+     * Returns the amount of strings on the fretboard
+     * @returns number: The amount of strings on the fretboard
+     */
+    getStringCount(): number {
+        return this.tuning.length;
+    }
+
+    /**
+     * Returns a string representation of the fretboard
+     * @returns string
+     */
     toString(): string {
         let result = "";
 
-        // append the fret numbers
+        // add the fret numbers
         for (let i = 0; i < this.fretboard[0].getLength(); i++) {
             if (i < 10) {
                 result += (i + "   ");
@@ -59,12 +117,13 @@ export default class Fretboard {
 
         result += "\n";
 
-        for (let i = 0; i < result.length; i++) {
+        // add a line to separate the fret numbers from the fretboard
+        for (const element of result) {
             result += "─";
         }
 
+        // use the toString method of each GuitarString object to add the notes to the string
         for (const guitarString of this.fretboard) {
-            // console.log(guitarString.toString());
             result += ('\n' +  guitarString.toString());
         }
         return result;

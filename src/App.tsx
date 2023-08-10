@@ -1,44 +1,18 @@
-import Note from './models/Note';
 import Fretboard from './models/Fretboard';
-import Scale from "./models/Scale";
-import React from 'react';
+
+import React, {useEffect, useState} from "react";
+
+import FretboardComponent from "./components/FretboardComponent.tsx";
 
 
 function App() {
-
-    function parseNotes(notes: string): Note[] {
-        let noteArray: Note[] = notes.split(" ").map((note) => new Note (note))
-
-        return noteArray.reverse()
-    }
-
-    new Note("C").getNextNoteBySemitones(4)
-
-    let CMajorScale = new Scale(new Note("C"), Scale.MAJOR)
-
-    console.log(CMajorScale.toString())
-
-    const fretboard = new Fretboard(parseNotes("D A E A C# E"), undefined, new Scale(new Note ("C"), Scale.MAJOR))
-    console.log(fretboard.toString())
-    console.log(parseNotes("D A E A C# E"))
-
-  return (
-      <div>
-
-          <h1>Tuning:</h1>
-          <input type={"text"} />
-          <button>Submit</button>
-
-          <h1>Scale:</h1>
-          <input type={"text"} />
-          <button>Submit</button>
-
-          <h1>Chord:</h1>
-          <input type={"text"} />
-          <button>Submit</button>
-
-      </div>
-  )
+    const fretboard = new Fretboard()
+    return (
+        <div>
+            <FretboardComponent fretboard={fretboard} width={1800} height={300} />
+            <h1 style={{ border: '1px solid black'}}>teststasd</h1>
+        </div>
+    )
 }
 
 export default App
