@@ -171,6 +171,10 @@ export default class Note {
         this.isVisible = isVisible;
     }
 
+    getVisibility(): boolean {
+        return this.isVisible;
+    }
+
     getName(): string {
         if (this.isVisible) {
             return this.name;

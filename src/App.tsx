@@ -9,6 +9,7 @@ import Note from "./models/Note.ts";
 function App() {
     // const tuning = Note.parseNotes("D A E A")
     const fretboard = new Fretboard(undefined, 22)
+    console.log(fretboard.getFretboard())
     return (
         <div>
             <FretboardComponent fretboard={fretboard} width={1800} height={300} />

@@ -47,6 +47,10 @@ export default class GuitarString {
         return this.fretsAmount;
     }
 
+    getFrets(): Note[] {
+        return this.frets;
+    }
+
     toString(): string {
         let result = "";
 

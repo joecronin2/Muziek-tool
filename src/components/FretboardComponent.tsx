@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Fretboard from "../models/Fretboard.ts";
 import Note from "../models/Note.ts";
+import GuitarString from "../models/GuitarString.ts";
 
 interface FretboardComponentProps {
     fretboard: Fretboard;
@@ -75,7 +76,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         const fontSize = 20;
         this.drawFretboardNumbering(this.height - this.topPadding + fontSize, fontSize);
 
-        this.drawNote(5, 5, new Note(), 10, 40)
+        // this.drawNote(5, 5, new Note(), 10, 40)
+        this.drawVisibleNotes()
     }
 
     drawFretboardStructure(stringSpacing: number, fretSpacing: number): void {
@@ -189,6 +191,27 @@ class FretboardComponent extends Component<FretboardComponentProps> {
             this.ctx.restore();
         } else {
             throw new Error("Canvas context is null.");
+        }
+    }
+
+    drawVisibleNotes(): void {
+        // loop through fretboard
+
+        let fretboard: GuitarString[] = this.fretboard.getFretboard();
+
+        for (let i = 0; i < fretboard.length; i++) {
+            for (let j = 0; j < fretboard[i].getFrets().length-1; j++) {
+                let note: Note = fretboard[i].frets[j];
+                if (note.getVisibility()) {
+                    this.drawNote(
+                        j,
+                        i,
+                        fretboard[i].getFrets()[j],
+                        10,
+                        30
+                    );
+                }
+            }
         }
     }
 
