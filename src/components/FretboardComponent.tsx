@@ -74,7 +74,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
         // Draw the fretboard numbering
         const fontSize = 20;
-        this.drawFretboardNumbering(this.height - this.topPadding + fontSize, fontSize);
+        const yOffset = -20
+        this.drawFretboardNumbering(this.height - this.topPadding + fontSize - yOffset, fontSize);
 
         // this.drawNote(5, 5, new Note(), 10, 40)
         this.drawVisibleNotes()
