@@ -49,6 +49,17 @@ export default class Note {
     }
 
     /**
+     * Returns an array of notes based on the provided string of notes. Notes are separated by spaces.
+     * For example, "C D E F G A B" will return an array of 7 notes.
+     * @param {string} notes - The string of notes to parse
+     */
+    static parseNotes(notes: string): Note[] {
+        const noteArray: Note[] = notes.split(" ").map((note) => new Note (note))
+
+        return noteArray.reverse()
+    }
+
+    /**
      * Checks if the provided note name is valid
      * @param name: string - The note name to check
      * @private

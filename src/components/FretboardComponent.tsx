@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Fretboard from "../models/Fretboard.ts";
+import Note from "../models/Note.ts";
 
 interface FretboardComponentProps {
     fretboard: Fretboard;
@@ -24,6 +25,17 @@ class FretboardComponent extends Component<FretboardComponentProps> {
             bottomPadding: 50
         }
     };
+
+    fretboard: Fretboard;
+
+    width: number;
+    height: number;
+
+    leftPadding: number;
+    rightPadding: number;
+    topPadding: number;
+    bottomPadding: number;
+
     stringSpacing: number;
     fretSpacing: number;
 
@@ -32,6 +44,20 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
     constructor(props: FretboardComponentProps) {
         super(props);
+
+        this.fretboard = this.props.fretboard;
+
+        this.width = this.props.width;
+        this.height = this.props.height;
+
+        this.leftPadding = this.props.padding.leftPadding;
+        this.rightPadding = this.props.padding.rightPadding;
+        this.topPadding = this.props.padding.topPadding;
+        this.bottomPadding = this.props.padding.bottomPadding;
+
+        // Initialize string and fret spacing
+        this.stringSpacing = (this.height - this.topPadding - this.bottomPadding) / (this.fretboard.getStringCount() - 1);
+        this.fretSpacing = (this.width - this.leftPadding - this.rightPadding) / (this.fretboard.getFretCount() - 1);
     }
 
     componentDidMount() {
@@ -41,35 +67,26 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         // Destructure the padding object
         const { padding , height, width, fretboard} = this.props;
 
-        // Initialize string and fret spacing
-        this.stringSpacing = (height - padding.topPadding - padding.bottomPadding) / (fretboard.getStringCount() - 1);
-        this.fretSpacing = (width - padding.leftPadding - padding.rightPadding) / (fretboard.getFretCount() - 1);
 
         // Call the drawing method
         this.drawFretboardStructure(this.stringSpacing, this.fretSpacing);
+
+        // Draw the fretboard numbering
+        const fontSize = 20;
+        this.drawFretboardNumbering(this.height - this.topPadding + fontSize, fontSize);
+
+        this.drawNote(5, 5, new Note(), 10, 40)
     }
 
     drawFretboardStructure(stringSpacing: number, fretSpacing: number): void {
-        // Destructure the padding object
-        const {
-            padding: {
-                leftPadding,
-                rightPadding,
-                topPadding,
-                bottomPadding
-            },
-            width,
-            height
-        }: FretboardComponentProps = this.props;
-
         if (this.ctx) {
             // Draw strings
             for (let i = 0; i < this.props.fretboard.getStringCount(); i++) {
                 this.ctx.beginPath();
-                this.ctx.moveTo(leftPadding, topPadding + stringSpacing * i);
+                this.ctx.moveTo(this.leftPadding, this.topPadding + stringSpacing * i);
                 this.ctx.lineTo(
-                    width - rightPadding,
-                    topPadding + stringSpacing * i
+                    this.width - this.rightPadding,
+                    this.topPadding + stringSpacing * i
                 );
                 this.ctx.stroke();
             }
@@ -83,8 +100,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
                     this.ctx.lineWidth = 4;
                 }
 
-                this.ctx.moveTo(leftPadding + fretSpacing * i, height - topPadding);
-                this.ctx.lineTo(leftPadding + fretSpacing * i, bottomPadding);
+                this.ctx.moveTo(this.leftPadding + fretSpacing * i, this.height - this.topPadding);
+                this.ctx.lineTo(this.leftPadding + fretSpacing * i, this.bottomPadding);
                 this.ctx.stroke();
 
                 this.ctx.lineWidth = 1;
@@ -94,11 +111,86 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         }
     }
 
-    drawFretboardNumbering(yPos: number): void {
-        // TODO: Implement
+    /**
+     * Draws the fretboard numbering.
+     * @param yPos : number - The y position of the numbering. Can be used to draw the numbering above or below the fretboard for example.
+     * @param fontSize : number - The font size of the numbering.
+     * @param fontType : string - The css font type of the numbering. Example: "Arial"
+     */
+    drawFretboardNumbering(yPos: number, fontSize?: number, fontType?: string): void {
+        // Set default font size
+        if (fontSize === undefined) {
+            fontSize = 20; // TODO: Use static class variable?
+        }
+        if (fontType === undefined) {
+            fontType = "Arial"; // TODO: Use static class variable?
+        }
+
+        if (!this.ctx) {
+            throw new Error("Canvas context is null.");
+        }
+
+        this.ctx.font = `${fontSize}px ${fontType}`;
+        this.ctx.textAlign = "center";
+        for (let i = 0; i < this.fretboard.getFretCount()-1; i++) {
+            this.ctx.fillText(String(i), (this.leftPadding + this.fretSpacing/2) + (i * this.fretSpacing), yPos);
+        }
 
     }
 
+    /**
+     * Gets the x and y position of a fret on the fretboard. The position is always exactly in the middle of the fret and on a string.
+     * @param fretNumber : number - The number of the fret.
+     * @param stringNumber : number - The number of the string.
+     */
+    getFretPosition(fretNumber: number, stringNumber: number): { xPos: number, yPos: number } {
+        const xPos = this.leftPadding + this.fretSpacing * fretNumber + (this.fretSpacing / 2);
+        const yPos = this.height - this.topPadding - this.stringSpacing * stringNumber
+
+        return { xPos, yPos };
+    }
+
+    drawNote(
+        fretNumber: number,
+        stringNumber: number,
+        note: Note,
+        radius?: number,
+        size?: number,
+        color?: string
+    ): void {
+        // Set default radius
+        if (radius === undefined) {
+            radius = 10;
+        }
+
+        // Set default color
+        if (color === undefined) {
+            color = "lightgreen";
+        }
+
+        const { xPos, yPos } = this.getFretPosition(fretNumber, stringNumber);
+        if (this.ctx) {
+            // Save the current context state
+            // This is done so that the color change doesn't affect other drawings
+            this.ctx.save();
+
+            // Draw the rounded rectangle
+            this.ctx.fillStyle = color;
+            this.ctx.roundRect(xPos - size/2, yPos - size/2, size, size, radius);
+            this.ctx.fill();
+
+            // Add text label on top
+            this.ctx.fillStyle = "black";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle"; // Set vertical alignment to center
+            this.ctx.fillText(note.getName(), xPos, yPos);
+
+            // Restore the previous context state, reverting the color change
+            this.ctx.restore();
+        } else {
+            throw new Error("Canvas context is null.");
+        }
+    }
 
     render() {
         return (
