@@ -179,7 +179,6 @@ export default class Note {
     getName(): string {
         if (this.isVisible) {
             return this.name;
-
         } else {
             return "-";
         }

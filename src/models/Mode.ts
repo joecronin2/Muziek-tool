@@ -36,7 +36,7 @@ export default class Mode {
         }
         
         if (rootNote === undefined) {
-            this.rootNote = this.defaultRootNote;1
+            this.rootNote = this.defaultRootNote;
         } else {
             this.rootNote = rootNote;
         }

@@ -1,7 +1,6 @@
 import NoteGroup from "./NoteGroup.ts";
 
 export default class Chord extends NoteGroup {
-
     static readonly MAJOR = [4, 3];
     static readonly MINOR = [3, 4];
     static readonly AUGMENTED = [4, 4];
@@ -28,10 +27,4 @@ export default class Chord extends NoteGroup {
     static readonly AUGMENTED_9 = [4, 4, 2, 3];
     static readonly AUGMENTED_MAJOR_9 = [4, 4, 3, 3];
     static readonly DOMINANT_9 = [4, 3, 3, 4];
-
-    // constructor(rootNote: Note, intervals: number[], name?: string) {
-    //     super(rootNote, intervals, name);
-    // }
-
-
 }
