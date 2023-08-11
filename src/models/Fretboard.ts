@@ -34,10 +34,10 @@ export default class Fretboard {
      */
     private static defaultTuning = [
         new Note("E", 4),
-        new Note("B", 3),
-        new Note("G", 3),
+        new Note("A", 3),
         new Note("D", 3),
-        new Note("A", 2),
+        new Note("G", 3),
+        new Note("B", 2),
         new Note("E", 2)
     ];
 
@@ -66,12 +66,20 @@ export default class Fretboard {
         this.fretboard = [];
         // Loop through the notes of the tuning and create a new GuitarString object based on each note
         for (const rootNote of this.tuning) {
+            console.log(rootNote)
             // Apply the optional noteGroup to the GuitarString object if it was provided
-            if (noteGroup === undefined) {
-                this.fretboard.push(new GuitarString(rootNote, this.fretsAmount));
-            } else {
-                this.fretboard.push(new GuitarString(rootNote, this.fretsAmount, noteGroup));
-            }
+            this.fretboard.push(new GuitarString(rootNote, this.fretsAmount));
+        }
+
+        // If a NoteGroup was provided, use the setNoteGroup method to apply it to the fretboard
+        if (noteGroup !== undefined) {
+            this.setNoteGroup(noteGroup);
+        }
+    }
+
+    setNoteGroup(noteGroup: NoteGroup): void {
+        for (const guitarString of this.fretboard) {
+            guitarString.setNoteGroup(noteGroup);
         }
     }
 

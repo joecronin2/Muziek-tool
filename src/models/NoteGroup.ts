@@ -6,7 +6,11 @@ export default class NoteGroup {
     private notes: Note[];
 
 
-
+    /**
+     * Creates a new note group. Both parameters are optional and will be set to the default if not provided.
+     * @param rootNote: Note - The root note of the note group
+     * @param intervals: number[] - The intervals of the note group
+     */
     constructor(rootNote: Note, intervals: number[]) {
         this.rootNote = rootNote;
         this.notes = [];
@@ -17,6 +21,18 @@ export default class NoteGroup {
         for (let i = 0; i < intervals.length; i++) {
             this.notes[i + 1] = this.notes[i].getNextNoteBySemitones(intervals[i]);
         }
+    }
+
+    getNotes(): Note[] {
+        return this.notes;
+    }
+
+    getRootNote(): Note {
+        return this.rootNote;
+    }
+
+    addNoteByIntervalFromRoot(interval: Interval): void {
+
     }
 
     toString(): string {

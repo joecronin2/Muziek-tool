@@ -159,8 +159,10 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         note: Note,
         radius?: number,
         size?: number,
-        color?: string
+        color?: string,
+        drawNoteName?: boolean
     ): void {
+
         // Set default radius
         if (radius === undefined) {
             radius = 10;
@@ -177,32 +179,56 @@ class FretboardComponent extends Component<FretboardComponentProps> {
             // This is done so that the color change doesn't affect other drawings
             this.ctx.save();
 
+
             // Draw the rounded rectangle
             this.ctx.fillStyle = color;
-            this.ctx.roundRect(xPos - size/2, yPos - size/2, size, size, radius);
+            this.roundedRect(xPos - size/2, yPos - size/2, size, size, radius);
             this.ctx.fill();
+
 
             // Add text label on top
             this.ctx.fillStyle = "black";
             this.ctx.textAlign = "center";
             this.ctx.textBaseline = "middle"; // Set vertical alignment to center
             this.ctx.fillText(note.getName(), xPos, yPos);
+            this.ctx.restore();
+
 
             // Restore the previous context state, reverting the color change
-            this.ctx.restore();
         } else {
             throw new Error("Canvas context is null.");
         }
+
+    }
+
+    /**
+     * Draws a rounded rectangle.
+     * This method should be used instead of the native roundRect() method because it causes bugs.
+     * @param x: number - The x position of the rectangle.
+     * @param y: number - The y position of the rectangle.
+     * @param width: number - The width of the rectangle.
+     * @param height: number - The height of the rectangle.
+     * @param radius: number - The radius of the rectangle.
+     */
+    roundedRect(x: number, y: number, width: number, height: number, radius: number) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x, y + radius);
+        this.ctx.arcTo(x, y + height, x + radius, y + height, radius);
+        this.ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+        this.ctx.arcTo(x + width, y, x + width - radius, y, radius);
+        this.ctx.arcTo(x, y, x, y + radius, radius);
+        this.ctx.stroke();
     }
 
     drawVisibleNotes(): void {
         // loop through fretboard
 
-        let fretboard: GuitarString[] = this.fretboard.getFretboard();
+        const fretboard: GuitarString[] = this.fretboard.getFretboard();
 
+        console.log(fretboard)
         for (let i = 0; i < fretboard.length; i++) {
             for (let j = 0; j < fretboard[i].getFrets().length-1; j++) {
-                let note: Note = fretboard[i].frets[j];
+                const note: Note = fretboard[i].frets[j];
                 if (note.getVisibility()) {
                     this.drawNote(
                         j,

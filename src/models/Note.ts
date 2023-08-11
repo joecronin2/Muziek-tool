@@ -56,7 +56,8 @@ export default class Note {
     static parseNotes(notes: string): Note[] {
         const noteArray: Note[] = notes.split(" ").map((note) => new Note (note))
 
-        return noteArray.reverse()
+        // return noteArray.reverse()
+        return noteArray;
     }
 
     /**

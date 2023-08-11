@@ -35,11 +35,33 @@ export default class GuitarString {
 
         // If a note group was provided, remove all notes that are not in the note group
         if (noteGroup !== undefined) {
-            for (const note of this.frets) {
-                if (!noteGroup.contains(note)) {
-                    note.setVisibility(false)
-                }
+            this.setNoteGroup(noteGroup)
+        }
+    }
+
+    /**
+     * Sets the visibility of all notes that are not in the note group to false
+     * @param noteGroup
+     */
+    setNoteGroup(noteGroup: NoteGroup): void {
+        // firstly, reset the note visibility
+        this.setAllNotesVisibility(true);
+
+        // then, set the visibility of all notes that are not in the note group to false
+        for (const note of this.frets) {
+            if (!noteGroup.contains(note)) {
+                note.setVisibility(false)
             }
+        }
+    }
+
+    /**
+     * Sets the visibility of all notes to the provided value
+     * @param visibility
+     */
+    setAllNotesVisibility(visibility: boolean): void {
+        for (const note of this.frets) {
+            note.setVisibility(visibility);
         }
     }
 
