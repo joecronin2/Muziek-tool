@@ -1,6 +1,7 @@
 import NoteGroup from "./NoteGroup";
 export default class Scale extends NoteGroup {
     static readonly SCALE_INTERVALS = {
+        chromatic: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         major: [2, 2, 1, 2, 2, 2, 1],
         minor: [2, 1, 2, 2, 1, 2, 2],
         major_bebop: [2, 2, 1, 2, 1, 1, 2],
