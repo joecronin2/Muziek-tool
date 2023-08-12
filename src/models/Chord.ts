@@ -1,30 +1,47 @@
 import NoteGroup from "./NoteGroup.ts";
+import Note from "./Note.ts";
+
+interface CHORD_INTERVALS {
+    [type: string]: number[];
+}
 
 export default class Chord extends NoteGroup {
-    static readonly MAJOR = [4, 3];
-    static readonly MINOR = [3, 4];
-    static readonly AUGMENTED = [4, 4];
-    static readonly DIMINISHED = [3, 3];
-    static readonly SUS2 = [2, 5];
-    static readonly SUS4 = [5, 2];
-    static readonly MAJOR_6 = [4, 3, 2];
-    static readonly MINOR_6 = [3, 4, 2];
-    static readonly DOMINANT_7 = [4, 3, 3];
-    static readonly MAJOR_7 = [4, 3, 4];
-    static readonly MINOR_7 = [3, 4, 3];
-    static readonly MINOR_MAJOR_7 = [3, 4, 4];
-    static readonly AUGMENTED_7 = [4, 4, 2];
-    static readonly AUGMENTED_MAJOR_7 = [4, 4, 3];
-    static readonly HALF_DIMINISHED_7 = [3, 3, 4];
-    static readonly DIMINISHED_7 = [3, 3, 3];
-    static readonly DOMINANT_7_FLAT_5 = [4, 2, 4];
-    static readonly DOMINANT_7_SHARP_5 = [4, 4, 2];
-    static readonly DOMINANT_7_SHARP_9 = [3, 3, 2, 4];
-    static readonly DOMINANT_7_FLAT_9 = [3, 3, 2, 3];
-    static readonly MAJOR_9 = [4, 3, 4, 3];
-    static readonly MINOR_9 = [3, 4, 3, 4];
-    static readonly MINOR_MAJOR_9 = [3, 4, 4, 3];
-    static readonly AUGMENTED_9 = [4, 4, 2, 3];
-    static readonly AUGMENTED_MAJOR_9 = [4, 4, 3, 3];
-    static readonly DOMINANT_9 = [4, 3, 3, 4];
+
+    static readonly CHORD_INTERVALS: { [type: string]: number[] } = {
+        major: [4, 3],
+        minor: [3, 4],
+        augmented: [4, 4],
+        diminished: [3, 3],
+        sus2: [2, 5],
+        sus4: [5, 2],
+        major_6: [4, 3, 2],
+        minor_6: [3, 4, 2],
+        dominant_7: [4, 3, 3],
+        major_7: [4, 3, 4],
+        minor_7: [3, 4, 3],
+        minor_major_7: [3, 4, 4],
+        augmented_7: [4, 4, 2],
+        augmented_major_7: [4, 4, 3],
+        half_diminished_7: [3, 3, 4],
+        diminished_7: [3, 3, 3],
+        dominant_7_flat_5: [4, 2, 4],
+        dominant_7_sharp_5: [4, 4, 2],
+        dominant_7_sharp_9: [3, 3, 2, 4],
+        dominant_7_flat_9: [3, 3, 2, 3],
+        major_9: [4, 3, 4, 3],
+        minor_9: [3, 4, 3, 4],
+        minor_major_9: [3, 4, 4, 3],
+        augmented_9: [4, 4, 2, 3],
+        augmented_major_9: [4, 4, 3, 3],
+        dominant_9: [4, 3, 3, 4],
+    };
+
+    contains(note: Note): boolean {
+        for (const noteInGroup of this.notes) {
+            if (noteInGroup.getName() === note.getName()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

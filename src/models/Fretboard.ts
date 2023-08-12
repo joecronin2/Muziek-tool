@@ -66,7 +66,6 @@ export default class Fretboard {
         this.fretboard = [];
         // Loop through the notes of the tuning and create a new GuitarString object based on each note
         for (const rootNote of this.tuning) {
-            console.log(rootNote)
             // Apply the optional noteGroup to the GuitarString object if it was provided
             this.fretboard.push(new GuitarString(rootNote, this.fretsAmount));
         }

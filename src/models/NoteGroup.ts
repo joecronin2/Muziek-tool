@@ -3,7 +3,7 @@ import Note from "./Note";
 export default class NoteGroup {
     private rootNote: Note;
     protected intervals: number[];
-    private notes: Note[];
+    protected notes: Note[];
 
 
     /**
@@ -31,8 +31,8 @@ export default class NoteGroup {
         return this.rootNote;
     }
 
-    addNoteByIntervalFromRoot(interval: Interval): void {
-
+    addNoteByIntervalFromRoot(interval: number): void {
+        this.notes.push(this.rootNote.getNextNoteBySemitones(interval));
     }
 
     toString(): string {

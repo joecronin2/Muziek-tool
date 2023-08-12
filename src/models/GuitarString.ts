@@ -44,13 +44,17 @@ export default class GuitarString {
      * @param noteGroup
      */
     setNoteGroup(noteGroup: NoteGroup): void {
-        // firstly, reset the note visibility
+        if (!(noteGroup instanceof NoteGroup)) {
+            throw new Error("Invalid noteGroup: It should be an instance of NoteGroup or its subclass.");
+        }
+
+        // Reset the note visibility
         this.setAllNotesVisibility(true);
 
-        // then, set the visibility of all notes that are not in the note group to false
+        // Set the visibility of notes not in the note group to false
         for (const note of this.frets) {
             if (!noteGroup.contains(note)) {
-                note.setVisibility(false)
+                note.setVisibility(false);
             }
         }
     }
