@@ -1,7 +1,12 @@
+import {name} from "postcss";
+
 /**
  * Represents a musical note
  */
 export default class Note {
+    static get notes(): string[] {
+        return this._notes;
+    }
     /**
      * Represents the notation of the note. e.g. "C#"
      * @private
@@ -13,9 +18,9 @@ export default class Note {
      */
     private octave: number;
 
-    private isVisible: boolean = true;
+    private isVisible = true;
 
-    private static notes: string[] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
+    private static _notes: string[] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
     private static defaultOctave = 4;
     private static defaultNote = "A";
@@ -66,7 +71,7 @@ export default class Note {
      * @private
      */
     private static isValidNoteName(name: string): boolean {
-        return Note.notes.includes(name);
+        return Note._notes.includes(name);
     }
 
     /**
@@ -76,7 +81,7 @@ export default class Note {
      */
     getNextNoteBySemitones(semitones: number): Note {
         // get index of current note
-        const currentIndex = Note.notes.indexOf(this.name);
+        const currentIndex = Note._notes.indexOf(this.name);
 
         /** In case that the semitones offset exceeds an octave, we need to adjust the octave as well
          * Say we have a note C4 and a semitones offset of 13. The resulting note should be C#5
@@ -93,7 +98,7 @@ export default class Note {
         const newOctave = this.octave + octaveAdjustment;
         
         // get new note based on index
-        const newNoteName = Note.notes[newIndex];
+        const newNoteName = Note._notes[newIndex];
         
         return new Note(newNoteName, newOctave);
     }

@@ -3,8 +3,12 @@ import Chord from "../models/Chord.ts";
 import Fretboard from "../models/Fretboard.ts";
 import NoteGroup from "../models/NoteGroup.ts";
 import Scale from "../models/Scale.ts";
+import {useState} from "react";
 
-export default function TestControls({ updateFretboard }) {
+export default function TestControls({ updateFretboard, fretboard }) {
+
+    const [fretsAmount, setFretsAmount] = useState(24); // Set the initial value
+
 
 
     function applyNotes() {
@@ -63,7 +67,12 @@ export default function TestControls({ updateFretboard }) {
             <input type={"text"} id={"tuning"}/>
 
             <h1>Frets:</h1>
-            <input type={"text"} id={"fretsAmount"}/>
+            <input
+                type={"number"}
+                id={"fretsAmount"}
+                value={fretsAmount}
+                // onChange={updateFretboard(new Fretboard())}
+            />
 
             <h1>Root note:</h1>
             <select id={"rootNote"}>

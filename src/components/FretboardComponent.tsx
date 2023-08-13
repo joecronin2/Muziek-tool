@@ -30,14 +30,14 @@ class FretboardComponent extends Component<FretboardComponentProps> {
     // TODO: class attributes arent updated when props change
     // fretboard: Fretboard;
 
-    width: number;
-    height: number;
-
-    leftPadding: number;
-    rightPadding: number;
-    topPadding: number;
-    bottomPadding: number;
-
+    // width: number;
+    // height: number;
+    //
+    // leftPadding: number;
+    // rightPadding: number;
+    // topPadding: number;
+    // bottomPadding: number;
+    //
     stringSpacing: number;
     fretSpacing: number;
 
@@ -46,18 +46,6 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
     constructor(props: FretboardComponentProps) {
         super(props);
-
-        this.width = this.props.width;
-        this.height = this.props.height;
-
-        this.leftPadding = this.props.padding.leftPadding;
-        this.rightPadding = this.props.padding.rightPadding;
-        this.topPadding = this.props.padding.topPadding;
-        this.bottomPadding = this.props.padding.bottomPadding;
-
-        // Initialize string and fret spacing
-        this.stringSpacing = (this.height - this.topPadding - this.bottomPadding) / (this.props.fretboard.getStringCount() - 1);
-        this.fretSpacing = (this.width - this.leftPadding - this.rightPadding) / (this.props.fretboard.getFretCount() - 1);
     }
 
     componentDidMount() {
@@ -68,7 +56,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
     componentDidUpdate() {
         // clear canvas
-        this.ctx?.clearRect(0, 0, this.width, this.height);
+        this.ctx?.clearRect(0, 0, this.props.width, this.props.height);
 
         console.log("Component Updated")
         console.log(this.props.fretboard)
@@ -77,6 +65,10 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
     init() {
         console.log("componentDidMount")
+        // Initialize string and fret spacing
+        this.stringSpacing = (this.props.height - this.props.padding.topPadding - this.props.padding.bottomPadding) / (this.props.fretboard.getStringCount() - 1);
+        this.fretSpacing = (this.props.width - this.props.padding.leftPadding - this.props.padding.rightPadding) / (this.props.fretboard.getFretCount() - 1);
+
         // Access canvas and context when the component mounts
         this.ctx = this.canvasRef.current?.getContext("2d");
 
@@ -86,7 +78,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         // Draw the fretboard numbering
         const fontSize = 20;
         const yOffset = -20
-        this.drawFretboardNumbering(this.height - this.topPadding + fontSize - yOffset, fontSize);
+        this.drawFretboardNumbering(this.props.height - this.props.padding.topPadding + fontSize - yOffset, fontSize);
 
         // this.drawNote(5, 5, new Note(), 10, 40)
         this.drawVisibleNotes()
@@ -96,10 +88,10 @@ class FretboardComponent extends Component<FretboardComponentProps> {
             // Draw strings
             for (let i = 0; i < this.props.fretboard.getStringCount(); i++) {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.leftPadding, this.topPadding + stringSpacing * i);
+                this.ctx.moveTo(this.props.padding.leftPadding, this.props.padding.topPadding + stringSpacing * i);
                 this.ctx.lineTo(
-                    this.width - this.rightPadding,
-                    this.topPadding + stringSpacing * i
+                    this.props.width - this.props.padding.rightPadding,
+                    this.props.padding.topPadding + stringSpacing * i
                 );
                 this.ctx.stroke();
             }
@@ -113,8 +105,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
                     this.ctx.lineWidth = 4;
                 }
 
-                this.ctx.moveTo(this.leftPadding + fretSpacing * i, this.height - this.topPadding);
-                this.ctx.lineTo(this.leftPadding + fretSpacing * i, this.bottomPadding);
+                this.ctx.moveTo(this.props.padding.leftPadding + fretSpacing * i, this.props.height - this.props.padding.topPadding);
+                this.ctx.lineTo(this.props.padding.leftPadding + fretSpacing * i, this.props.padding.bottomPadding);
                 this.ctx.stroke();
 
                 this.ctx.lineWidth = 1;
@@ -146,7 +138,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         this.ctx.font = `${fontSize}px ${fontType}`;
         this.ctx.textAlign = "center";
         for (let i = 0; i < this.props.fretboard.getFretCount()-1; i++) {
-            this.ctx.fillText(String(i), (this.leftPadding + this.fretSpacing/2) + (i * this.fretSpacing), yPos);
+            this.ctx.fillText(String(i), (this.props.padding.leftPadding + this.fretSpacing/2) + (i * this.fretSpacing), yPos);
         }
 
     }
@@ -157,8 +149,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
      * @param stringNumber : number - The number of the string.
      */
     getFretPosition(fretNumber: number, stringNumber: number): { xPos: number, yPos: number } {
-        const xPos = this.leftPadding + this.fretSpacing * fretNumber + (this.fretSpacing / 2);
-        const yPos = this.height - this.topPadding - this.stringSpacing * stringNumber
+        const xPos = this.props.padding.leftPadding + this.fretSpacing * fretNumber + (this.fretSpacing / 2);
+        const yPos = this.props.height - this.props.padding.topPadding - this.stringSpacing * stringNumber
 
         return { xPos, yPos };
     }

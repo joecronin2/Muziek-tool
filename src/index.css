@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.toggleButton {
+    @apply hover:bg-violet-900 text-white font-bold py-2 px-4 rounded;
+}
+
+.selectableButtonContainer {
+    @apply flex gap-2;
+}
