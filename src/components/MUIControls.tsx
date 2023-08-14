@@ -1,3 +1,148 @@
-export default function MUIControls() {
-    
+import {TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
+import React, {useState} from "react";
+import Scale from "../models/Scale.ts";
+import Chord from "../models/Chord.ts";
+import Note from "../models/Note.ts";
+import Fretboard from "../models/Fretboard.ts";
+import NoteGroup from "../models/NoteGroup.ts";
+
+
+
+export default function MUIControls({ updateFretboard, fretboard }) {
+    const [selectedNote, setSelectedNote] = useState("");
+    const [selectedScale, setSelectedScale] = useState(null);
+    const [selectedChord, setSelectedChord] = useState(null);
+    const [fretsAmount, setFretsAmount] = useState(24); // Set the initial value
+    const [selectedTuning, setSelectedTuning] = useState(fretboard.getTuningString()); // Set the initial value
+
+    const noteButtons = Note.notes.map((note, index) => (
+        <ToggleButton key={index} value={note}>
+            {note}
+        </ToggleButton>
+    ));
+
+    const chordButtons = Object.keys(Chord.CHORD_INTERVALS).map((chordName, index) => (
+        <ToggleButton key={index} value={chordName}>
+            {chordName.replace(/_/g, " ")}
+        </ToggleButton>
+    ));
+
+    const scaleButtons = Object.keys(Scale.SCALE_INTERVALS).map((scaleName, index) => (
+        <ToggleButton key={index} value={scaleName}>
+            {scaleName.replace(/_/g, " ")}
+        </ToggleButton>
+    ));
+
+    const handleNoteChange = (event, newNote) => {
+        setSelectedNote(newNote);
+        setSelectedChord(null); // Reset selected chord
+        setSelectedScale(null); // Reset selected scale
+
+
+        console.log(newNote, selectedChord, selectedScale)
+    };
+
+    const handleChordChange = (event, newChord) => {
+        setSelectedChord(newChord);
+        setSelectedScale(null); // Reset selected scale
+
+        if (selectedNote !== null) {
+            const newNoteGroup = new NoteGroup(new Note(selectedNote), Chord.CHORD_INTERVALS[newChord.toLowerCase()])
+            const newFretboard = new Fretboard(fretboard.tuning, fretsAmount, newNoteGroup)
+            console.log(newFretboard.toString())
+            updateFretboard(newFretboard)
+        }
+
+
+
+        console.log(selectedNote, newChord, selectedScale)
+
+    };
+
+    const handleScaleChange = (event, newScale) => {
+        setSelectedChord(null); // Reset selected chord
+        setSelectedScale(newScale);
+
+        const newNoteGroup = new NoteGroup(new Note(selectedNote), Scale.SCALE_INTERVALS[newScale.toLowerCase()])
+        const newFretboard = new Fretboard(fretboard.tuning, fretsAmount, newNoteGroup)
+        updateFretboard(newFretboard)
+
+        console.log(selectedNote, selectedChord, newScale)
+
+    };
+
+    const handleFretsAmountChange = (event) => {
+        setFretsAmount(event.target.value);
+        const newFretboard = new Fretboard(fretboard.tuning, fretsAmount, undefined)
+        updateFretboard(newFretboard)
+    }
+
+    const handleTuningChange = (event) => {
+        setSelectedTuning(event.target.value);
+        const newFretboard = new Fretboard(Note.parseNotes(event.target.value), fretsAmount, undefined)
+        updateFretboard(newFretboard)
+    }
+
+    return (
+        <div className={"flex flex-col gap-4"}>
+            <ToggleButtonGroup
+                orientation={"horizontal"}
+                color="primary"
+                value={selectedNote}
+                exclusive
+                onChange={handleNoteChange}
+                aria-label="Note"
+            >
+                {noteButtons}
+            </ToggleButtonGroup>
+
+            <ToggleButtonGroup
+                orientation={"horizontal"}
+                color="primary"
+                value={selectedChord}
+                exclusive
+                onChange={handleChordChange}
+                aria-label="Chord"
+            >
+                {chordButtons}
+            </ToggleButtonGroup>
+
+            <ToggleButtonGroup
+                orientation={"horizontal"}
+                color="primary"
+                value={selectedScale}
+                exclusive
+                onChange={handleScaleChange}
+                aria-label="Scale"
+            >
+                {scaleButtons}
+            </ToggleButtonGroup>
+
+            <TextField
+                className={"w-20"}
+                id="outlined-number"
+                label="Frets"
+                type="number"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                variant="outlined"
+                defaultValue={fretboard.fretsAmount}
+                onChange={handleFretsAmountChange}
+            />
+
+            <TextField
+                className={"w-32"}
+                id="outlined-textarea"
+                label="Tuning"
+                type="text"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                defaultValue={selectedTuning}
+                onChange={handleTuningChange}
+            />
+
+        </div>
+    )
 }

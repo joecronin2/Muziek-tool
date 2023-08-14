@@ -76,6 +76,14 @@ export default class Fretboard {
         }
     }
 
+    getTuningString(): string {
+        let result = "";
+        for (const note of this.tuning) {
+            result += note.getName() + " ";
+        }
+        return result;
+    }
+
     setNoteGroup(noteGroup: NoteGroup): void {
         for (const guitarString of this.fretboard) {
             guitarString.setNoteGroup(noteGroup);
