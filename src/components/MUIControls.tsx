@@ -1,4 +1,4 @@
-import {TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
+import {Autocomplete, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import React, {useState} from "react";
 import Scale from "../models/Scale.ts";
 import Chord from "../models/Chord.ts";
@@ -25,6 +25,10 @@ export default function MUIControls({ updateFretboard, fretboard }) {
         <ToggleButton key={index} value={chordName}>
             {chordName.replace(/_/g, " ")}
         </ToggleButton>
+    ));
+
+    const chordAutocompleteOptions = Object.keys(Chord.CHORD_INTERVALS).map((chordName, index) => (
+        chordName.replace(/_/g, " ")
     ));
 
     const scaleButtons = Object.keys(Scale.SCALE_INTERVALS).map((scaleName, index) => (
@@ -85,6 +89,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
 
     return (
         <div className={"flex flex-col gap-4"}>
+            <h1 className={"text-2xl"}>Root Note:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
                 color="primary"
@@ -96,7 +101,9 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                 {noteButtons}
             </ToggleButtonGroup>
 
+            <h1 className={"text-2xl"}>Chord:</h1>
             <ToggleButtonGroup
+                className={"flex flex-row flex-wrap w-1/2"}
                 orientation={"horizontal"}
                 color="primary"
                 value={selectedChord}
@@ -107,6 +114,17 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                 {chordButtons}
             </ToggleButtonGroup>
 
+            {/*<Autocomplete*/}
+            {/*    disablePortal*/}
+            {/*    id="combo-box-demo"*/}
+            {/*    options={chordAutocompleteOptions}*/}
+            {/*    sx={{ width: 300 }}*/}
+            {/*    renderInput={(params) => <TextField {...params} label="Chord"*/}
+            {/*    onChange={handleChordChange}*/}
+            {/*    />}*/}
+            {/*/>*/}
+
+            <h1 className={"text-2xl"}>Scale:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
                 color="primary"
