@@ -85,6 +85,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
 
     return (
         <div className={"flex flex-col gap-4"}>
+            <h1 className={"text-2xl"}>Root Note:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
                 color="primary"
@@ -96,6 +97,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                 {noteButtons}
             </ToggleButtonGroup>
 
+            <h1 className={"text-2xl"}>Chord:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
                 color="primary"
@@ -107,6 +109,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                 {chordButtons}
             </ToggleButtonGroup>
 
+            <h1 className={"text-2xl"}>Scale:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
                 color="primary"

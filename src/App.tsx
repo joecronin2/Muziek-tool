@@ -6,13 +6,15 @@ import React, {useState} from "react";
 import NoteGroup from "./models/NoteGroup.ts";
 import ButtonLayout from "./components/ButtonLayout.tsx";
 import Scale from "./models/Scale.ts";
-import {Button, createTheme, ThemeProvider, ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {Button, createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import MUIControls from "./components/MUIControls.tsx";
 
 function App() {
     const tuning: Note[] = Note.parseNotes("D A E A C# E")
     const amountFrets = 24
 
+    const [width, setWidth] = useState(1900)
+    const [height, setHeight] = useState(300)
 
     const [fretboard, setFretboard] = useState(
         new Fretboard()
@@ -29,11 +31,30 @@ function App() {
 
     const scales = Object.keys(Scale.SCALE_INTERVALS)
 
+    const onWidthChange = (event) => {
+        setWidth(event.target.value)
+        updateFretboard(fretboard)
+        console.log(event.target.value)
+    }
+
+    const onHeightChange = (event) => {
+        setHeight(event.target.value)
+        updateFretboard(fretboard)
+        console.log(event.target.value)
+
+    }
+
     return (
         <>
             <MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>
 
-            <FretboardComponent fretboard={new Fretboard()} width={1900} height={300} />
+            <FretboardComponent
+                fretboard={fretboard}
+                width={width}
+                height={height}
+                style={{ border: "1px solid black" }}
+                
+            />
             {/*<TestControls updateFretboard={updateFretboard} />*/}
             {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
 
@@ -41,6 +62,31 @@ function App() {
             {/*    <ButtonLayout options={Note.notes} />*/}
             {/*    <ButtonLayout options={scales}/>*/}
             {/*</div>*/}
+
+
+            <div className={"w-1/2"}>
+                <h2>Width:</h2>
+                <Slider
+                    min={1000}
+                    max={2000}
+                    size="medium"
+                    defaultValue={1900}
+                    aria-label="Small"
+                    valueLabelDisplay="auto"
+                    onChange={onWidthChange}
+                />
+
+                <h2>Height:</h2>
+                <Slider
+                    min={260}
+                    max={600}
+                    size="medium"
+                    defaultValue={300}
+                    aria-label="Small"
+                    valueLabelDisplay="auto"
+                    onChange={onHeightChange}
+                />
+            </div>
 
 
 
