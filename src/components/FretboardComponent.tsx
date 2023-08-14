@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Fretboard from "../models/Fretboard.ts";
 import Note from "../models/Note.ts";
 import GuitarString from "../models/GuitarString.ts";
+import Color from "colorjs.io";
 
 interface FretboardComponentProps {
     fretboard: Fretboard;
@@ -9,10 +10,17 @@ interface FretboardComponentProps {
     height?: number;
     padding?: {
         leftPadding: number;
-        rightPadding: number;
-        topPadding: number;
-        bottomPadding: number;
+        right: number;
+        top: number;
+        bottom: number;
     };
+    palette?: {
+        backgroundColor: Color;
+        stringColor: Color;
+        fretColor: Color;
+        noteTextColor: Color;
+        noteColor: Color;
+    }
 }
 
 class FretboardComponent extends Component<FretboardComponentProps> {
@@ -21,9 +29,16 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         height: 300,
         padding: {
             leftPadding: 50,
-            rightPadding: 50,
-            topPadding: 50,
-            bottomPadding: 50
+            right: 50,
+            top: 50,
+            bottom: 50
+        },
+        palette: {
+            backgroundColor: new Color("#000000"),
+            stringColor: new Color("#FFFFFF"),
+            fretColor: new Color("#FFFFFF"),
+            noteTextColor: new Color("#000000"),
+            noteColor: new Color("#90EE90")
         }
     };
 
@@ -34,9 +49,9 @@ class FretboardComponent extends Component<FretboardComponentProps> {
     // height: number;
     //
     // leftPadding: number;
-    // rightPadding: number;
-    // topPadding: number;
-    // bottomPadding: number;
+    // right: number;
+    // top: number;
+    // bottom: number;
     //
     stringSpacing: number;
     fretSpacing: number;
@@ -66,8 +81,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
     init() {
         console.log("componentDidMount")
         // Initialize string and fret spacing
-        this.stringSpacing = (this.props.height - this.props.padding.topPadding - this.props.padding.bottomPadding) / (this.props.fretboard.getStringCount() - 1);
-        this.fretSpacing = (this.props.width - this.props.padding.leftPadding - this.props.padding.rightPadding) / (this.props.fretboard.getFretCount() - 1);
+        this.stringSpacing = (this.props.height - this.props.padding.top - this.props.padding.bottom) / (this.props.fretboard.getStringCount() - 1);
+        this.fretSpacing = (this.props.width - this.props.padding.left - this.props.padding.right) / (this.props.fretboard.getFretCount() - 1);
 
         // Access canvas and context when the component mounts
         this.ctx = this.canvasRef.current?.getContext("2d");
@@ -78,7 +93,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         // Draw the fretboard numbering
         const fontSize = 20;
         const yOffset = -20
-        this.drawFretboardNumbering(this.props.height - this.props.padding.topPadding + fontSize - yOffset, fontSize);
+        this.drawFretboardNumbering(this.props.height - this.props.padding.top + fontSize - yOffset, fontSize);
 
         // this.drawNote(5, 5, new Note(), 10, 40)
         this.drawVisibleNotes()
@@ -86,12 +101,13 @@ class FretboardComponent extends Component<FretboardComponentProps> {
     drawFretboardStructure(stringSpacing: number, fretSpacing: number): void {
         if (this.ctx) {
             // Draw strings
+            this.ctx.strokeStyle = this.props.palette.stringColor.toString({format: "hex" });
             for (let i = 0; i < this.props.fretboard.getStringCount(); i++) {
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.props.padding.leftPadding, this.props.padding.topPadding + stringSpacing * i);
+                this.ctx.moveTo(this.props.padding.left, this.props.padding.top + stringSpacing * i);
                 this.ctx.lineTo(
-                    this.props.width - this.props.padding.rightPadding,
-                    this.props.padding.topPadding + stringSpacing * i
+                    this.props.width - this.props.padding.right,
+                    this.props.padding.top + stringSpacing * i
                 );
                 this.ctx.stroke();
             }
@@ -105,8 +121,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
                     this.ctx.lineWidth = 4;
                 }
 
-                this.ctx.moveTo(this.props.padding.leftPadding + fretSpacing * i, this.props.height - this.props.padding.topPadding);
-                this.ctx.lineTo(this.props.padding.leftPadding + fretSpacing * i, this.props.padding.bottomPadding);
+                this.ctx.moveTo(this.props.padding.left + fretSpacing * i, this.props.height - this.props.padding.top);
+                this.ctx.lineTo(this.props.padding.left + fretSpacing * i, this.props.padding.bottom);
                 this.ctx.stroke();
 
                 this.ctx.lineWidth = 1;
@@ -138,7 +154,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         this.ctx.font = `${fontSize}px ${fontType}`;
         this.ctx.textAlign = "center";
         for (let i = 0; i < this.props.fretboard.getFretCount()-1; i++) {
-            this.ctx.fillText(String(i), (this.props.padding.leftPadding + this.fretSpacing/2) + (i * this.fretSpacing), yPos);
+            this.ctx.fillText(String(i), (this.props.padding.left + this.fretSpacing/2) + (i * this.fretSpacing), yPos);
         }
 
     }
@@ -149,8 +165,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
      * @param stringNumber : number - The number of the string.
      */
     getFretPosition(fretNumber: number, stringNumber: number): { xPos: number, yPos: number } {
-        const xPos = this.props.padding.leftPadding + this.fretSpacing * fretNumber + (this.fretSpacing / 2);
-        const yPos = this.props.height - this.props.padding.topPadding - this.stringSpacing * stringNumber
+        const xPos = this.props.padding.left + this.fretSpacing * fretNumber + (this.fretSpacing / 2);
+        const yPos = this.props.height - this.props.padding.top - this.stringSpacing * stringNumber
 
         return { xPos, yPos };
     }
@@ -171,7 +187,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
         // Set default color
         if (color === undefined) {
-            color = "lightgreen";
+            color = this.props.palette.backgroundColor.toString({format: "hex" });
         }
 
         const { xPos, yPos } = this.getFretPosition(fretNumber, stringNumber);

@@ -33,7 +33,7 @@ function App() {
         <>
             <MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>
 
-            <FretboardComponent fretboard={fretboard} width={1900} height={300} />
+            <FretboardComponent fretboard={new Fretboard()} width={1900} height={300} />
             {/*<TestControls updateFretboard={updateFretboard} />*/}
             {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
 
