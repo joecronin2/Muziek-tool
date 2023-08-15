@@ -29,7 +29,7 @@ export default class GuitarString {
 
         this.frets = [];
 
-        for (let i = 0; i < this.fretsAmount; i++) {
+        for (let i = 0; i < this.fretsAmount+1; i++) {
             this.frets[i] = this.rootNote.getNextNoteBySemitones(i);
         }
 

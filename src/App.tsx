@@ -10,9 +10,6 @@ import {Button, createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGr
 import MUIControls from "./components/MUIControls.tsx";
 
 function App() {
-    const tuning: Note[] = Note.parseNotes("D A E A C# E")
-    const amountFrets = 24
-
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(300)
 
@@ -21,9 +18,11 @@ function App() {
     )
 
     function updateFretboard(fretboard: Fretboard) {
-        // console.log(fretboard)
+
+        console.log(fretboard)
+        console.log(fretboard.getFretCount())
         setFretboard(fretboard);
-        // console.log(fretboard)
+        console.log(fretboard)
     }
 
     // const fretboard: Fretboard = new Fretboard(Note.parseNotes("D A E A C# E"), undefined, new Scale(new Note ("C"), Scale.MAJOR))
@@ -43,8 +42,6 @@ function App() {
         console.log(event.target.value)
 
     }
-
-    ;
 
     return (
         <>

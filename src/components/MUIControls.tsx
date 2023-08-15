@@ -12,7 +12,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
     const [selectedNote, setSelectedNote] = useState("");
     const [selectedScale, setSelectedScale] = useState(null);
     const [selectedChord, setSelectedChord] = useState(null);
-    const [fretsAmount, setFretsAmount] = useState(24); // Set the initial value
+    const [fretsAmount, setFretsAmount] = useState(fretboard.getFretCount()); // Set the initial value
     const [selectedTuning, setSelectedTuning] = useState(fretboard.getTuningString()); // Set the initial value
 
     const noteButtons = Note.notes.map((note, index) => (
@@ -76,9 +76,18 @@ export default function MUIControls({ updateFretboard, fretboard }) {
     };
 
     const handleFretsAmountChange = (event) => {
-        setFretsAmount(event.target.value);
-        const newFretboard = new Fretboard(fretboard.tuning, fretsAmount, undefined)
-        updateFretboard(newFretboard)
+        const newFretsAmount = +event.target.value+1; // +1 because the first fret (0) is also counted
+
+        console.log("Before: " + fretsAmount);
+        setFretsAmount((newFretsAmount) => {
+            console.log("Inside: " + fretsAmount);
+            return newFretsAmount
+        }); // Update the state
+
+        console.log("After: " + fretsAmount);
+
+        const newFretboard = new Fretboard(fretboard.tuning, newFretsAmount, undefined);
+        updateFretboard(newFretboard);
     }
 
     const handleTuningChange = (event) => {
@@ -145,7 +154,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                     shrink: true,
                 }}
                 variant="outlined"
-                defaultValue={fretboard.fretsAmount}
+                defaultValue={fretsAmount}
                 onChange={handleFretsAmountChange}
             />
 

@@ -26,7 +26,7 @@ export default class Fretboard {
      * The default amount of frets that will be used if no amount is provided
      * @private
      */
-    private static defaultFretsAmount = 24;
+    private static defaultFretsAmount = 22;
 
     /**
      * The default tuning that will be used if no tuning is provided
@@ -59,7 +59,7 @@ export default class Fretboard {
         if (fretsAmount === undefined) {
             this.fretsAmount = Fretboard.defaultFretsAmount;
         } else {
-            this.fretsAmount = fretsAmount;
+            this.fretsAmount = fretsAmount-1;
         }
 
         // Creates the fretboard
