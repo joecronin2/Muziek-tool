@@ -76,6 +76,11 @@ export default class Fretboard {
         }
     }
 
+    /**
+     * Returns the tuning of the fretboard as a string
+     * @returns string
+     * @example "E A D G B E "
+     */
     getTuningString(): string {
         let result = "";
         for (const note of this.tuning) {
@@ -84,6 +89,10 @@ export default class Fretboard {
         return result;
     }
 
+    /**
+     * Sets the visibility of all notes that are not in the note group to false
+     * @param noteGroup
+     */
     setNoteGroup(noteGroup: NoteGroup): void {
         for (const guitarString of this.fretboard) {
             guitarString.setNoteGroup(noteGroup);
@@ -143,6 +152,4 @@ export default class Fretboard {
         }
         return result;
     }
-
-
 }

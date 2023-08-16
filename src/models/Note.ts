@@ -73,7 +73,10 @@ export default class Note {
 
         for (const note of stringArray) {
             // If the last character of the note is a number, it is an octave
-            if (typeof note.charAt(-1) === 'number') {
+            console.log(noteArray)
+            console.log(note.charAt(note.length-1))
+            console.log(!isNaN(Number(note.charAt(note.length - 1))))
+            if (!isNaN(Number(note.charAt(note.length - 1)))) {
                 const octave = parseInt(note.slice(-1));
                 const noteName = note.slice(0, -1);
                 noteArray.push(new Note(noteName, octave));

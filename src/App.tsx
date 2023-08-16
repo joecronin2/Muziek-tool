@@ -39,7 +39,8 @@ function App() {
 
     // const scales = Object.keys(Scale.SCALE_INTERVALS)
 
-    const daea = Note.parseNotes("D A E A C# E")
+    const daea = Note.parseNotes("D4 A E A C# E")
+    console.log(daea)
 
     const onWidthChange = (event) => {
         setWidth(event.target.value)
@@ -63,7 +64,7 @@ function App() {
                 width={width}
                 height={height}
                 style={{ border: "1px solid black" }}
-                
+
             />
             {/*<TestControls updateFretboard={updateFretboard} />*/}
             {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
