@@ -13,22 +13,33 @@ function App() {
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(300)
 
+    const octaveColors = [
+        {0 : "#ff0000"},
+        {1 : "#ff8000"},
+        {2 : "#ffff00"},
+        {3 : "#00ff00"},
+        {4 : "#00ffff"},
+        {5 : "#0000ff"},
+        {6 : "#8000ff"},
+        {7 : "#ff00ff"},
+        {8 : "#ff0080"},
+        {9 : "#ff0000"}
+    ]
+
     const [fretboard, setFretboard] = useState(
         new Fretboard()
     )
 
     function updateFretboard(fretboard: Fretboard) {
-
-        console.log(fretboard)
-        console.log(fretboard.getFretCount())
         setFretboard(fretboard);
-        console.log(fretboard)
     }
 
     // const fretboard: Fretboard = new Fretboard(Note.parseNotes("D A E A C# E"), undefined, new Scale(new Note ("C"), Scale.MAJOR))
     // const fretboard = new Fretboard()
 
-    const scales = Object.keys(Scale.SCALE_INTERVALS)
+    // const scales = Object.keys(Scale.SCALE_INTERVALS)
+
+    const daea = Note.parseNotes("D A E A C# E")
 
     const onWidthChange = (event) => {
         setWidth(event.target.value)

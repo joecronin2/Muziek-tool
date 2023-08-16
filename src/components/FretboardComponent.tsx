@@ -15,6 +15,7 @@ interface FretboardComponentProps {
         bottomPadding: number;
     };
     palette?: {
+        octaveColors: Color[]
         backgroundColor: Color;
         stringColor: Color;
         fretColor: Color;
@@ -22,6 +23,7 @@ interface FretboardComponentProps {
         noteColor: Color;
         fretNumberingColor?: Color;
     }
+
 }
 
 class FretboardComponent extends Component<FretboardComponentProps> {
@@ -35,6 +37,18 @@ class FretboardComponent extends Component<FretboardComponentProps> {
             bottomPadding: 50
         },
         palette: {
+            octaveColors: [
+                new Color("#FF5733"), // Reddish-orange
+                new Color("#FFA333"), // Light orange
+                new Color("#FFD700"), // Gold
+                new Color("#80C72F"), // Greenish
+                new Color("#00CED1"), // Dark Turquoise
+                new Color("#0074D9"), // Blue
+                new Color("#8A2BE2"), // Blue Violet
+                new Color("#FF1493"), // Deep Pink
+                new Color("#FF69B4"), // Hot Pink
+                new Color("#FF5733"), // Reddish-orange (same as the first for a cyclic look)
+            ],
             backgroundColor: new Color("white"),
             stringColor: new Color("black"),
             fretColor: new Color("black"),
@@ -48,34 +62,40 @@ class FretboardComponent extends Component<FretboardComponentProps> {
     // TODO: class attributes arent updated when props change
     // fretboard: Fretboard;
 
-    // width: number;
-    // height: number;
-    //
-    // leftPadding: number;
-    // rightPadding: number;
-    // topPadding: number;
-    // bottomPadding: number;
-    //
-    stringSpacing: number;
-    fretSpacing: number;
+    private stringSpacing: number | undefined;
+    private fretSpacing: number | undefined;
 
-    canvasRef = React.createRef<HTMLCanvasElement>();
+
+    canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
     ctx: CanvasRenderingContext2D | null = null;
 
 
     componentDidMount() {
         console.log("Component Mounted")
-        this.init()
+
+        if (this.props === undefined) {
+            throw new Error("Props are undefined");
+            // this.props = FretboardComponent.defaultProps;
+        }
+
+        if (this.canvasRef.current) {
+            this.ctx = this.canvasRef.current.getContext("2d");
+            if (this.ctx) {
+                this.init();
+            }
+        }
+
     }
 
     componentDidUpdate() {
         // clear canvas
-        this.ctx?.clearRect(0, 0, this.props.width, this.props.height);
+        this.ctx!.clearRect(0, 0, this.props.width!, this.props.height!);
 
         console.log("Component Updated")
-        console.log(this.props.fretboard)
         this.init()
     }
+
+
 
     init() {
         console.log("componentDidMount")
@@ -83,21 +103,16 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         // Initialize string and fret spacing
 
         // actual width is the width of the fretboard without the padding
-        const actualWidth = this.props.width - this.props.padding.leftPadding - this.props.padding.rightPadding
-        const actualHeight = this.props.height - this.props.padding.topPadding - this.props.padding.bottomPadding
-        console.log(actualWidth, this.props.width)
+        const actualWidth = this.props.width! - this.props.padding!.leftPadding - this.props.padding!.rightPadding
+        const actualHeight = this.props.height! - this.props.padding!.topPadding - this.props.padding!.bottomPadding
 
         const totalFretCount: number = this.props.fretboard.getFretCount() + 1
 
         this.stringSpacing = actualHeight / (this.props.fretboard.getStringCount() - 1);
         this.fretSpacing = actualWidth / (totalFretCount);
 
-        console.log(totalFretCount)
 
-        // log: fretspacing: actualWidth / (totalFretCount)
-        console.log("Fret spacing: " + actualWidth + " / " + totalFretCount + " = " + this.fretSpacing)
 
-        console.log(this.fretSpacing)
 
         // Access canvas and context when the component mounts
         this.ctx = this.canvasRef.current?.getContext("2d");
@@ -118,7 +133,6 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         this.ctx.fillStyle = this.props.palette.fretNumberingColor.toString({format: "hex"});
         this.drawFretboardNumbering(this.props.height - this.props.padding.topPadding + fontSize - yOffset, fontSize);
 
-        // this.drawNote(5, 5, new Note(), 10, 40)
         this.drawVisibleNotes()
     }
     drawFretboardStructure(stringSpacing: number, fretSpacing: number): void {
@@ -212,9 +226,9 @@ class FretboardComponent extends Component<FretboardComponentProps> {
         stringNumber: number,
         note: Note,
         radius?: number,
-        size?: number,
-        color?: string,
-        drawNoteName?: boolean
+        size: number = 30,
+        color: Color = this.props.palette.noteColor ?? FretboardComponent.defaultProps.palette.noteColor,
+        drawNoteName: boolean = true
     ): void {
         // Set default radius
         if (radius === undefined) {
@@ -223,7 +237,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
         // Set default color
         if (color === undefined) {
-            color = this.props.palette.noteColor.toString({format: "hex"});
+            color = this.props.palette.noteColor;
         }
 
         const { xPos, yPos } = this.getFretPosition(fretNumber, stringNumber);
@@ -234,7 +248,7 @@ class FretboardComponent extends Component<FretboardComponentProps> {
 
 
             // Draw the rounded rectangle
-            this.ctx.fillStyle = color;
+            this.ctx.fillStyle = color.toString({format: "hex"});
             this.roundedRect(xPos - size/2, yPos - size/2, size, size, radius);
             this.ctx.fill();
 
@@ -264,22 +278,25 @@ class FretboardComponent extends Component<FretboardComponentProps> {
      * @param radius: number - The radius of the rectangle.
      */
     roundedRect(x: number, y: number, width: number, height: number, radius: number) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(x, y + radius);
-        this.ctx.arcTo(x, y + height, x + radius, y + height, radius);
-        this.ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-        this.ctx.arcTo(x + width, y, x + width - radius, y, radius);
-        this.ctx.arcTo(x, y, x, y + radius, radius);
-        this.ctx.stroke();
+        this.ctx?.beginPath();
+        this.ctx?.moveTo(x, y + radius);
+        this.ctx?.arcTo(x, y + height, x + radius, y + height, radius);
+        this.ctx?.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+        this.ctx?.arcTo(x + width, y, x + width - radius, y, radius);
+        this.ctx?.arcTo(x, y, x, y + radius, radius);
+        this.ctx?.stroke();
     }
 
     drawVisibleNotes(): void {
-        // loop through fretboard
+        const octaveColors = this.props.palette?.octaveColors ?? FretboardComponent.defaultProps.palette.octaveColors
+        // console.log(octaveColors)
+        console.log(this.props.fretboard)
 
         const fretboard: GuitarString[] = this.props.fretboard.getFretboard();
 
+        // loop through fretboard
         for (let i = 0; i < fretboard.length; i++) {
-            for (let j = 0; j < fretboard[i].getFrets().length+0; j++) {
+            for (let j = 0; j < fretboard[i].getFrets().length; j++) {
                 const note: Note = fretboard[i].frets[j];
                 if (note.getVisibility()) {
                     this.drawNote(
@@ -287,7 +304,8 @@ class FretboardComponent extends Component<FretboardComponentProps> {
                         i,
                         fretboard[i].getFrets()[j],
                         10,
-                        30
+                        30,
+                        octaveColors[note.octave % octaveColors.length],
                     );
                 }
             }

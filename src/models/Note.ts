@@ -1,9 +1,16 @@
 import {name} from "postcss";
+import {name} from "autoprefixer";
 
 /**
  * Represents a musical note
  */
 export default class Note {
+    get octave(): number {
+        return this._octave;
+    }
+    set octave(value: number) {
+        this._octave = value;
+    }
     static get notes(): string[] {
         return this._notes;
     }
@@ -16,7 +23,7 @@ export default class Note {
      * Represents the octave of the note. e.g. 4
      * @private
      */
-    private octave: number;
+    private _octave: number;
 
     private isVisible = true;
 
@@ -47,19 +54,33 @@ export default class Note {
 
         // Checks if an octave was provided and sets it to the default if it wasn't
         if (octave === undefined) {
-            this.octave = Note.defaultOctave;
+            this._octave = Note.defaultOctave;
         } else {
-            this.octave = octave;
+            this._octave = octave;
         }
     }
 
     /**
      * Returns an array of notes based on the provided string of notes. Notes are separated by spaces.
      * For example, "C D E F G A B" will return an array of 7 notes.
+     *
+     * Octaves can also be specified by appending the octave number to the note name. For example, "C4 D4 E4 F4 G4 A4 B4"
      * @param {string} notes - The string of notes to parse
      */
     static parseNotes(notes: string): Note[] {
-        const noteArray: Note[] = notes.split(" ").map((note) => new Note (note))
+        const stringArray: string[] = notes.split(" ");
+        const noteArray: Note[] = [];
+
+        for (const note of stringArray) {
+            // If the last character of the note is a number, it is an octave
+            if (typeof note.charAt(-1) === 'number') {
+                const octave = parseInt(note.slice(-1));
+                const noteName = note.slice(0, -1);
+                noteArray.push(new Note(noteName, octave));
+            } else {
+                noteArray.push(new Note(note));
+            }
+        }
 
         // return noteArray.reverse()
         return noteArray;
@@ -95,7 +116,7 @@ export default class Note {
         const newIndex = (semitones + currentIndex) % 12;
 
         // get new index and octave
-        const newOctave = this.octave + octaveAdjustment;
+        const newOctave = this._octave + octaveAdjustment;
         
         // get new note based on index
         const newNoteName = Note._notes[newIndex];

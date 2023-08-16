@@ -50,10 +50,13 @@ export default function MUIControls({ updateFretboard, fretboard }) {
         setSelectedChord(newChord);
         setSelectedScale(null); // Reset selected scale
 
+        console.log(fretsAmount)
+
         if (selectedNote !== null) {
             const newNoteGroup = new NoteGroup(new Note(selectedNote), Chord.CHORD_INTERVALS[newChord.toLowerCase()])
+            console.log(fretsAmount)
             const newFretboard = new Fretboard(fretboard.tuning, fretsAmount, newNoteGroup)
-            console.log(newFretboard.toString())
+            // console.log(newFretboard.toString())
             updateFretboard(newFretboard)
         }
 
@@ -78,9 +81,7 @@ export default function MUIControls({ updateFretboard, fretboard }) {
     const handleFretsAmountChange = (event) => {
         const newFretsAmount = +event.target.value+1; // +1 because the first fret (0) is also counted
 
-        console.log("Before: " + fretsAmount);
         setFretsAmount((newFretsAmount) => {
-            console.log("Inside: " + fretsAmount);
             return newFretsAmount
         }); // Update the state
 

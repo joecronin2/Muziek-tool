@@ -2,9 +2,12 @@ import Note from "./Note.ts";
 import NoteGroup from "./NoteGroup.ts";
 
 export default class GuitarString {
+    get frets(): Note[] {
+        return this._frets;
+    }
     private fretsAmount: number;
     private rootNote: Note;
-    private frets: Note[];
+    private _frets: Note[];
 
     private static defaultFretsAmount = 24;
     private static defaultRootNote = new Note();
@@ -27,10 +30,10 @@ export default class GuitarString {
             this.fretsAmount = fretsAmount;
         }
 
-        this.frets = [];
+        this._frets = [];
 
         for (let i = 0; i < this.fretsAmount+1; i++) {
-            this.frets[i] = this.rootNote.getNextNoteBySemitones(i);
+            this._frets[i] = this.rootNote.getNextNoteBySemitones(i);
         }
 
         // If a note group was provided, remove all notes that are not in the note group
@@ -52,7 +55,7 @@ export default class GuitarString {
         this.setAllNotesVisibility(true);
 
         // Set the visibility of notes not in the note group to false
-        for (const note of this.frets) {
+        for (const note of this._frets) {
             if (!noteGroup.contains(note)) {
                 note.setVisibility(false);
             }
@@ -64,7 +67,7 @@ export default class GuitarString {
      * @param visibility
      */
     setAllNotesVisibility(visibility: boolean): void {
-        for (const note of this.frets) {
+        for (const note of this._frets) {
             note.setVisibility(visibility);
         }
     }
@@ -74,19 +77,19 @@ export default class GuitarString {
     }
 
     getFrets(): Note[] {
-        return this.frets;
+        return this._frets;
     }
 
     toString(): string {
         let result = "";
 
         for (let i = 0; i < this.fretsAmount; i++) {
-            if (this.frets[i].getName().length > 1) {
-                result += this.frets[i].getName() + "  ";
-            } else if (this.frets[i] === null) {
+            if (this._frets[i].getName().length > 1) {
+                result += this._frets[i].getName() + "  ";
+            } else if (this._frets[i] === null) {
                 result += "    ";
             } else {
-                result += this.frets[i].getName() + "   ";
+                result += this._frets[i].getName() + "   ";
             }
         }
         return result;

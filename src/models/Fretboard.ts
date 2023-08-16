@@ -26,7 +26,7 @@ export default class Fretboard {
      * The default amount of frets that will be used if no amount is provided
      * @private
      */
-    private static defaultFretsAmount = 22;
+    private static defaultFretsAmount = 24;
 
     /**
      * The default tuning that will be used if no tuning is provided
