@@ -9,6 +9,7 @@ import Scale from "./models/Scale.ts";
 import {Button, createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import MUIControls from "./components/MUIControls.tsx";
 import Color from "colorjs.io";
+import ChordSelector from "./components/ChordSelector/ChordSelector.tsx";
 
 function App() {
     const [width, setWidth] = useState(window.innerWidth)
@@ -39,23 +40,26 @@ function App() {
 
     return (
         <>
-            <MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>
+            {/*<MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>*/}
+
+            <ChordSelector />
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
 
             <FretboardComponent
                 fretboard={fretboard}
                 width={width}
                 height={height}
-
-                palette={
-                    {
-                        backgroundColor: new Color("#526D82"),
-                        fretColor: new Color("white"),
-                        fretNumberingColor: new Color("#E5E5E5"),
-                        stringColor: new Color("#E5E5E5"),
-                    }
-                }
-                // style={{ border: "1px solid black" }}
-
             />
             {/*<TestControls updateFretboard={updateFretboard} />*/}
             {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
