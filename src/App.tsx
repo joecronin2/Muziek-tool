@@ -8,23 +8,12 @@ import ButtonLayout from "./components/ButtonLayout.tsx";
 import Scale from "./models/Scale.ts";
 import {Button, createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import MUIControls from "./components/MUIControls.tsx";
+import Color from "colorjs.io";
 
 function App() {
     const [width, setWidth] = useState(window.innerWidth)
     const [height, setHeight] = useState(300)
 
-    const octaveColors = [
-        {0 : "#ff0000"},
-        {1 : "#ff8000"},
-        {2 : "#ffff00"},
-        {3 : "#00ff00"},
-        {4 : "#00ffff"},
-        {5 : "#0000ff"},
-        {6 : "#8000ff"},
-        {7 : "#ff00ff"},
-        {8 : "#ff0080"},
-        {9 : "#ff0000"}
-    ]
 
     const [fretboard, setFretboard] = useState(
         new Fretboard()
@@ -34,21 +23,14 @@ function App() {
         setFretboard(fretboard);
     }
 
-    // const fretboard: Fretboard = new Fretboard(Note.parseNotes("D A E A C# E"), undefined, new Scale(new Note ("C"), Scale.MAJOR))
-    // const fretboard = new Fretboard()
 
-    // const scales = Object.keys(Scale.SCALE_INTERVALS)
-
-    const daea = Note.parseNotes("D4 A E A C# E")
-    console.log(daea)
-
-    const onWidthChange = (event) => {
+    const onWidthChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
         setWidth(event.target.value)
         updateFretboard(fretboard)
         console.log(event.target.value)
     }
 
-    const onHeightChange = (event) => {
+    const onHeightChange = (event: { target: { value: React.SetStateAction<number>; }; }): void => {
         setHeight(event.target.value)
         updateFretboard(fretboard)
         console.log(event.target.value)
@@ -63,7 +45,16 @@ function App() {
                 fretboard={fretboard}
                 width={width}
                 height={height}
-                style={{ border: "1px solid black" }}
+
+                palette={
+                    {
+                        backgroundColor: new Color("#526D82"),
+                        fretColor: new Color("white"),
+                        fretNumberingColor: new Color("#E5E5E5"),
+                        stringColor: new Color("#E5E5E5"),
+                    }
+                }
+                // style={{ border: "1px solid black" }}
 
             />
             {/*<TestControls updateFretboard={updateFretboard} />*/}

@@ -15,12 +15,12 @@ interface FretboardComponentProps {
         bottomPadding: number;
     };
     palette?: {
-        octaveColors: Color[]
-        backgroundColor: Color;
-        stringColor: Color;
-        fretColor: Color;
-        noteTextColor: Color;
-        noteColor: Color;
+        octaveColors?: Color[]
+        backgroundColor?: Color;
+        stringColor?: Color;
+        fretColor?: Color;
+        noteTextColor?: Color;
+        noteColor?: Color;
         fretNumberingColor?: Color;
     }
 

@@ -1,4 +1,4 @@
-import {Autocomplete, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
+import {Autocomplete, createTheme, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import React, {useState} from "react";
 import Scale from "../models/Scale.ts";
 import Chord from "../models/Chord.ts";
@@ -93,16 +93,22 @@ export default function MUIControls({ updateFretboard, fretboard }) {
 
     const handleTuningChange = (event) => {
         setSelectedTuning(event.target.value);
-        const newFretboard = new Fretboard(Note.parseNotes(event.target.value), fretsAmount, undefined)
+        const parsedTuning = Note.parseNotes(event.target.value)
+        const octaveAdjustedTuning = Fretboard.adjustExpectedOctavesForTuning(parsedTuning)
+
+        const newFretboard = new Fretboard(octaveAdjustedTuning, fretsAmount, undefined)
         updateFretboard(newFretboard)
     }
 
+
+
+
     return (
         <div className={"flex flex-col gap-4"}>
-            <h1 className={"text-2xl"}>Root Note:</h1>
+            <h1 className={"text-2xl text-tertiary"}>Root Note:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
-                color="primary"
+                className={"bg-tertiary"}
                 value={selectedNote}
                 exclusive
                 onChange={handleNoteChange}
@@ -111,11 +117,10 @@ export default function MUIControls({ updateFretboard, fretboard }) {
                 {noteButtons}
             </ToggleButtonGroup>
 
-            <h1 className={"text-2xl"}>Chord:</h1>
+            <h1 className={"text-2xl text-tertiary"}>Chord:</h1>
             <ToggleButtonGroup
-                className={"flex flex-row flex-wrap w-1/2"}
+                className={"flex flex-row flex-wrap w-1/2 bg-tertiary"}
                 orientation={"horizontal"}
-                color="primary"
                 value={selectedChord}
                 exclusive
                 onChange={handleChordChange}
@@ -134,10 +139,10 @@ export default function MUIControls({ updateFretboard, fretboard }) {
             {/*    />}*/}
             {/*/>*/}
 
-            <h1 className={"text-2xl"}>Scale:</h1>
+            <h1 className={"text-2xl text-tertiary"}>Scale:</h1>
             <ToggleButtonGroup
                 orientation={"horizontal"}
-                color="primary"
+                className={"bg-tertiary"}
                 value={selectedScale}
                 exclusive
                 onChange={handleScaleChange}

@@ -26,13 +26,12 @@ export default class Fretboard {
      * The default amount of frets that will be used if no amount is provided
      * @private
      */
-    private static defaultFretsAmount = 24;
+    private static readonly  defaultFretsAmount = 24;
 
     /**
-     * The default tuning that will be used if no tuning is provided
-     * @private
+     * Standard guitar tuning for a six string guitar
      */
-    private static defaultTuning = [
+    static readonly STANDARD_TUNING = [
         new Note("E", 4),
         new Note("A", 3),
         new Note("D", 3),
@@ -42,11 +41,64 @@ export default class Fretboard {
     ];
 
     /**
-     * The constructor of the Fretboard class.
-     * @param tuning: Note[] - The tuning of the fretboard
-     * @param fretsAmount: number - The amount of frets on the fretboard
-     * @param noteGroup: Can be used to apply groups of notes (e.g. scales or chords) to the fretboard, for example to highlight those notes
+     * The default tuning that will be used if no tuning is provided
+     * @private
      */
+    private static readonly defaultTuning = this.STANDARD_TUNING
+
+
+    /**
+     * This method calculates the expected octave of a tuning rootnote.
+     * This is necessary for custom tunings because the octave of a string may change depending on the note that is tuned to.
+     *
+     * @example Say we have a custom tuning where the G string is instead tuned to an A.
+     * The octave of the A string is 3, but the octave of the A note is 4.
+     * If we don't change the octave of the A note, the fretboard will be displayed incorrectly.
+     *
+     * @param note
+     * @param guitarString
+     */
+    static calculateExpectedOctave(note: Note, guitarString: number) {
+        const noteIndex = Note.notes.indexOf(note.getName());
+        const stringNote = this.STANDARD_TUNING[guitarString - 1];
+        const stringIndex = Note.notes.indexOf(stringNote.getName());
+        const octaveDiff = stringNote.octave - note.octave; // Calculate octave difference
+
+        const distance = noteIndex - stringIndex;
+
+        const adjustedNote = note.getNextNoteBySemitones(distance);
+
+        // Check if changing octave is necessary based on octave difference
+        const expectedOctave = adjustedNote.octave + octaveDiff;
+        return expectedOctave;
+    }
+
+    static adjustExpectedOctavesForTuning(tuning: Note[]): Note[] {
+        const adjustedTuning: Note[] = [];
+
+        for (let i = 0; i < tuning.length; i++) {
+            const adjustedOctave = this.calculateExpectedOctave(tuning[i], i + 1);
+            const adjustedNote = new Note(tuning[i].getName(), adjustedOctave);
+            adjustedTuning.push(adjustedNote);
+        }
+
+        return adjustedTuning;
+    }
+
+
+    /*
+    * A, A#, B, C, C#, D, D#, E, F, F#, G, G#
+    * 0, 1, 2,  3, 4,  5, 6,  7, 8, 9 ,10, 11
+
+    * */
+
+    /**
+     * The constructor of the Fretboard class.
+     * @param {Note[]} tuning - The tuning of the fretboard.
+     * @param {number} fretsAmount - The amount of frets on the fretboard.
+     * @param {NoteGroup} noteGroup - Can be used to apply groups of notes (e.g. scales or chords) to the fretboard, for example to highlight those notes.
+     */
+
     constructor (tuning?: Note[], fretsAmount?: number, noteGroup?: NoteGroup) {
         // Checks if the tuning was provided and sets it to the default if it wasn't
         if (tuning === undefined) {

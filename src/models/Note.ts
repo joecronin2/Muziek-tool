@@ -1,6 +1,3 @@
-import {name} from "postcss";
-import {name} from "autoprefixer";
-
 /**
  * Represents a musical note
  */
@@ -73,9 +70,6 @@ export default class Note {
 
         for (const note of stringArray) {
             // If the last character of the note is a number, it is an octave
-            console.log(noteArray)
-            console.log(note.charAt(note.length-1))
-            console.log(!isNaN(Number(note.charAt(note.length - 1))))
             if (!isNaN(Number(note.charAt(note.length - 1)))) {
                 const octave = parseInt(note.slice(-1));
                 const noteName = note.slice(0, -1);
@@ -107,7 +101,7 @@ export default class Note {
         // get index of current note
         const currentIndex = Note._notes.indexOf(this.name);
 
-        /** In case that the semitones offset exceeds an octave, we need to adjust the octave as well
+        /* In case that the semitones offset exceeds an octave, we need to adjust the octave as well
          * Say we have a note C4 and a semitones offset of 13. The resulting note should be C#5
          *
          * We calculate the octave adjustment by dividing the semitones offset by 12 and rounding down.
@@ -126,6 +120,7 @@ export default class Note {
         
         return new Note(newNoteName, newOctave);
     }
+
 
     /**
      * Returns the semitone offset for the given interval name.
