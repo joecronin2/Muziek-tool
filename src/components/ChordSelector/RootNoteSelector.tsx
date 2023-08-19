@@ -3,10 +3,12 @@ import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {useEffect, useState} from "react";
 
 export default function RootNoteSelector({ onSelectRootNote }) {
+    const [selectedNote, setSelectedNote] = useState("");
     const notes = Note.notes;
-    const handleNoteChange = (selectedNote) => {
+    const handleNoteChange = (event, selectedNote) => {
         console.log(selectedNote)
-        onSelectRootNote(new Note(selectedNote));
+        setSelectedNote(selectedNote);
+        onSelectRootNote(selectedNote);
     }
 
     return (

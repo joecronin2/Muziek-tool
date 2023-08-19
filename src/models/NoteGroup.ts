@@ -8,18 +8,30 @@ export default class NoteGroup {
 
     /**
      * Creates a new note group. Both parameters are optional and will be set to the default if not provided.
-     * @param rootNote: Note - The root note of the note group
-     * @param intervals: number[] - The intervals of the note group
+     * @param {Note} rootNote - The root note of the note group
+     * @param {number[]} intervals? - The intervals of the note group. Defaults to []
      */
-    constructor(rootNote: Note, intervals: number[]) {
+    constructor(rootNote: Note, intervals?: number[]) {
         this.rootNote = rootNote;
         this.notes = [];
-        this.intervals = intervals;
-
-
         this.notes[0] = this.rootNote;
-        for (let i = 0; i < intervals.length; i++) {
-            this.notes[i + 1] = this.notes[i].getNextNoteBySemitones(intervals[i]);
+
+
+        // set default of this.intervals to an empty array if intervals haven't been provided
+        if (intervals === undefined) {
+            this.intervals = [];
+        } else {
+            this.intervals = intervals;
+            this.buildNotesFromIntervals()
+        }
+
+
+    }
+
+    buildNotesFromIntervals(): void {
+        this.notes[0] = this.rootNote;
+        for (let i = 0; i < this.intervals.length; i++) {
+            this.notes[i + 1] = this.notes[i].getNextNoteBySemitones(this.intervals[i]);
         }
     }
 
@@ -31,9 +43,19 @@ export default class NoteGroup {
         return this.rootNote;
     }
 
+    /**
+     * Makes the intervals array based on the notes in the note array
+     */
+    buildIntervalsFromNotes(): void {
+        // TODO: Implement this method
+    }
+
     addNoteByIntervalFromRoot(interval: number): void {
         this.notes.push(this.rootNote.getNextNoteBySemitones(interval));
+
+        this.buildIntervalsFromNotes()
     }
+
 
     toString(): string {
         let result = "";

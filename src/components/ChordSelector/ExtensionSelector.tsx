@@ -1,7 +1,7 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { useState } from "react";
 
-export default function ExtensionSelector() {
+export default function ExtensionSelector({ onSelectExtension }) {
     const [selectedExtensions, setSelectedExtensions] = useState([]);
 
     const extensions = {

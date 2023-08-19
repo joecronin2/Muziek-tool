@@ -121,6 +121,14 @@ export default class Note {
         return new Note(newNoteName, newOctave);
     }
 
+    /**
+     * Returns the semitone distance between the current note and the provided note, negative if the provided note is lower
+     * @param note
+     */
+    getDistanceTo(note: Note): number {
+        // TODO: Implement
+        return 0;
+    }
 
     /**
      * Returns the semitone offset for the given interval name.

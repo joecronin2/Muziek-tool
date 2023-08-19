@@ -38,29 +38,27 @@ function App() {
 
     }
 
+    const onSelectChord = (chord: NoteGroup) => {
+        setFretboard(new Fretboard(undefined, undefined, chord))
+    }
+
     return (
         <>
             {/*<MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>*/}
 
-            <ChordSelector />
+            <ChordSelector onSelectChord={onSelectChord}/>
 
             <br/>
             <br/>
             <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+
 
             <FretboardComponent
                 fretboard={fretboard}
                 width={width}
                 height={height}
             />
+
             {/*<TestControls updateFretboard={updateFretboard} />*/}
             {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
 
