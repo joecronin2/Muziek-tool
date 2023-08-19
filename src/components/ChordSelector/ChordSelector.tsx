@@ -56,6 +56,11 @@ export default function ChordSelector({ onSelectChord }) {
             }
         }
 
+        if (extensions) {
+            for (const extension of extensions) {
+                chord.addNoteByIntervalFromRoot(extension)
+            }
+        }
 
         console.log(chord.toString())
 
