@@ -17,7 +17,7 @@ function App() {
 
 
     const [fretboard, setFretboard] = useState(
-        new Fretboard()
+        new Fretboard(Note.parseNotes("F A C G C E"))
     )
 
     function updateFretboard(fretboard: Fretboard) {
@@ -46,11 +46,11 @@ function App() {
         <>
             {/*<MUIControls fretboard={fretboard} updateFretboard={updateFretboard}/>*/}
 
-            <ChordSelector onSelectChord={onSelectChord}/>
+            {/*<ChordSelector onSelectChord={onSelectChord}/>*/}
 
-            <br/>
-            <br/>
-            <br/>
+            {/*<br/>*/}
+            {/*<br/>*/}
+            {/*<br/>*/}
 
 
             <FretboardComponent
@@ -59,8 +59,7 @@ function App() {
                 height={height}
             />
 
-            {/*<TestControls updateFretboard={updateFretboard} />*/}
-            {/*<h1 className={"text-2xl text-blue-500"}>TEST</h1>*/}
+            <TestControls updateFretboard={updateFretboard} fretboard={fretboard} />
 
             {/*<div className={"flex gap-5"}>*/}
             {/*    <ButtonLayout options={Note.notes} />*/}

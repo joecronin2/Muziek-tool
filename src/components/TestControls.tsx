@@ -64,18 +64,19 @@ export default function TestControls({ updateFretboard, fretboard }) {
     return (
         <>
             <h1>Tuning:</h1>
-            <input type={"text"} id={"tuning"}/>
+            <input type={"text"} id={"tuning"} onChange={applyNotes}/>
 
             <h1>Frets:</h1>
             <input
                 type={"number"}
                 id={"fretsAmount"}
                 value={fretsAmount}
+                onChange={applyNotes}
                 // onChange={updateFretboard(new Fretboard())}
             />
 
             <h1>Root note:</h1>
-            <select id={"rootNote"}>
+            <select id={"rootNote"} onChange={applyNotes}>
                 <option value={"A"}>A</option>
                 <option value={"A#"}>A#</option>
                 <option value={"B"}>B</option>
@@ -91,8 +92,8 @@ export default function TestControls({ updateFretboard, fretboard }) {
             </select>
 
             <h1>Chord</h1>
-            <input type="radio" id={"chordTypeRadio"} name="slct"/>
-            <select id="chordType">
+            <input type="radio" id={"chordTypeRadio"} name="slct" onChange={applyNotes}/>
+            <select id="chordType" onChange={applyNotes}>
                 {Object.keys(Chord.CHORD_INTERVALS).map((chordType) => (
                     <option key={chordType} value={chordType}>
                         {chordType.replace(/_/g, " ")}
@@ -101,8 +102,8 @@ export default function TestControls({ updateFretboard, fretboard }) {
             </select>
 
             <h1>Scale</h1>
-            <input type="radio" id={"scaleTypeRadio"} name="slct"/>
-            <select id="scaleType">
+            <input type="radio" id={"scaleTypeRadio"} name="slct" onChange={applyNotes}/>
+            <select id="scaleType" onChange={applyNotes}>
                 {Object.keys(Scale.SCALE_INTERVALS).map((scaleType) => (
                     <option key={scaleType} value={scaleType}>
                         {scaleType.replace(/_/g, " ")}
@@ -115,9 +116,9 @@ export default function TestControls({ updateFretboard, fretboard }) {
             <br></br>
             <br></br>
             <br></br>
-            <button onClick={applyNotes}>
-                OK
-            </button>
+            {/*<button onClick={applyNotes}>*/}
+            {/*    OK*/}
+            {/*</button>*/}
         </>
     )
 }
